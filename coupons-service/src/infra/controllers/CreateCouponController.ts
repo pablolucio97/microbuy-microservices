@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   HttpCode,
   HttpStatus,
@@ -30,7 +31,12 @@ export class CreateCouponController {
       const coupon = await this.createCouponUseCase.execute(body);
       return coupon;
     } catch (error) {
-      console.log(error);
+      console.log('INTERNAL ERROR] :', error.message);
+      if (error.status && error.status === HttpStatus.CONFLICT) {
+        throw new ConflictException(error.message);
+      } else {
+        throw new BadRequestException(error.message);
+      }
     }
   }
 }

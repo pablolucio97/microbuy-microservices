@@ -11,7 +11,7 @@ export class ListCouponsController {
       const coupon = await this.listCouponsUseCase.execute();
       return coupon;
     } catch (error) {
-      console.log(error);
+      console.log('INTERNAL ERROR] :', error.message);
     }
   }
 }
