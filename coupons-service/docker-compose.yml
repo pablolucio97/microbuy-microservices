@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+ postgres:
+   container_name: postgres-db
+   image: postgres
+   environment:
+     POSTGRES_USER: admin
+     POSTGRES_PASSWORD: admin
+     POSTGRES_DB: coupons-db
+     PG_DATA: /data/postgres
+   ports:
+     - "5432:5432"
+   volumes:
+     - ./data/pg:/data/postgres
+   healthcheck:
+     test: ["CMD-SHELL", "pg_isready -U admin -d coupons-db"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+
+ coupons-service:
+    container_name: coupons-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["sh", "-c", "npx prisma generate && npm run start:dev"]
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "3333:3333"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ${DATABASE_URL}
