@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
@@ -15,24 +15,17 @@ datasource db {
 }
 
 model Product {
-  id             String   @id @default(uuid())
-  name           String
-  description    String
-  price          Float
-  order_products OrderProduct[]
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  orderId     String?
+  order       Order?  @relation(fields: [orderId], references: [id])
 }
 
 model Order {
-  id             String   @id @default(uuid())
-  created_at     DateTime @default(now())
-  order_products OrderProduct[]
-}
-
-model OrderProduct {
-  order_id   String
-  product_id String
-  order      Order   @relation(fields: [order_id], references: [id])
-  product    Product @relation(fields: [product_id], references: [id])
-
-  @@id([order_id, product_id])
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  total      Float
+  products   Product[]
 }

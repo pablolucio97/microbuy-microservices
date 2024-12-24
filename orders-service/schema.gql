@@ -1,0 +1,37 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateOrderInput {
+  total: Float!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createOrder(data: CreateOrderInput!): Order!
+}
+
+"""order"""
+type Order {
+  created_at: DateTime!
+  id: ID!
+  products: [Product!]
+  total: Float!
+}
+
+"""product"""
+type Product {
+  description: String!
+  id: ID!
+  name: String!
+  price: Float!
+}
+
+type Query {
+  listOrders: [Order!]!
+  listProducts: [Product!]!
+}
