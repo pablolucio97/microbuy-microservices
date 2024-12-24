@@ -10,7 +10,7 @@ services:
      POSTGRES_DB: coupons-db
      PG_DATA: /data/postgres
    ports:
-     - "5432:5432"
+     - "5433:5432"
    volumes:
      - ./data/pg:/data/postgres
    healthcheck:
