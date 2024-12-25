@@ -19,4 +19,7 @@ export class Order {
     }
     return this.products.reduce((acc, op) => acc + op.price, 0);
   }
+
+  @Field(() => Boolean)
+  was_processed: boolean;
 }

@@ -1,5 +1,4 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateOrderInput } from '../inputs/orderInputs';
 import { Order } from '../model/order.model';
 import { OrderService } from '../services/order.service';
 
@@ -13,7 +12,9 @@ export class OrdersResolver {
   }
 
   @Mutation(() => Order, { name: 'createOrder' })
-  async createOrder(@Args('data') data: CreateOrderInput) {
-    return await this.orderService.createOrder(data);
+  async createOrder(
+    @Args('productIds', { type: () => [String] }) productsIds: string[],
+  ) {
+    return await this.orderService.createOrder(productsIds);
   }
 }

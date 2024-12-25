@@ -6,7 +6,7 @@ import { Product } from '../model/product.model';
 export class ProductService {
   constructor(private prismaService: PrismaService) {}
   async getProducts(): Promise<Product[]> {
-    const products = await this.prismaService.product.findMany();
+    const products = await this.prismaService.product.findMany({});
     return products;
   }
 }
