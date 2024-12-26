@@ -16,3 +16,7 @@ export interface ICreateCouponDTO {
   total: number;
   processed: boolean;
 }
+
+export interface IProcessCouponDTO {
+  id: string;
+}

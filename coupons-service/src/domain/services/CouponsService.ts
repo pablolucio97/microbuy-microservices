@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CouponsRepository } from '../repositories/CouponsRepository';
 import { ICouponsRepository } from '../repositories/interfaces/CouponsRepository';
-import { ICreateCouponDTO } from '../repositories/interfaces/dtos/CouponDTO';
+import {
+  ICreateCouponDTO,
+  IProcessCouponDTO,
+} from '../repositories/interfaces/dtos/CouponDTO';
 
 @Injectable()
 export class CouponsService implements ICouponsRepository {
@@ -19,5 +22,8 @@ export class CouponsService implements ICouponsRepository {
   }
   async listCoupons() {
     return this.couponsRepository.listCoupons();
+  }
+  async processCoupon(data: IProcessCouponDTO) {
+    return this.couponsRepository.processCoupon(data);
   }
 }
