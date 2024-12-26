@@ -8,6 +8,7 @@ import { CreateCouponController } from '../controllers/CreateCouponController';
 import { ListCouponsController } from '../controllers/ListCouponsController';
 import { ProcessCouponController } from '../controllers/ProcessCouponController';
 import { PrismaService } from '../services/Prisma';
+import { RabbitMQService } from '../services/RabbitMQService';
 
 @Module({
   controllers: [
@@ -17,6 +18,7 @@ import { PrismaService } from '../services/Prisma';
   ],
   providers: [
     PrismaService,
+    RabbitMQService,
     CouponsRepository,
     CouponsService,
     CreateCouponUseCase,
