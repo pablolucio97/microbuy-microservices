@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { SendEmailUseCase } from 'src/useCases/emails/sendEmailUseCase';
+import { SendEmailUseCase } from '../../useCases/emails/SendEmailUseCase';
 import { z } from 'zod';
 
 const emailDataSchema = z.object({

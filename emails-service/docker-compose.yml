@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  emails-service:
+    container_name: emails-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+    - .:/usr/src/app
+    ports:
+      - 3335:3335
+
+
