@@ -29,6 +29,8 @@ export class SendGridEmailSender {
 
     const { to, order } = data;
 
+    const emailReceiver = to;
+
     const htmlContent = `
     <div style="display: flex; flex-direction: column;">
         <span>
@@ -42,7 +44,7 @@ export class SendGridEmailSender {
     </div>`;
 
     const email = {
-      to,
+      to: emailReceiver,
       from: emailSendAuthor,
       subject: 'Ordem processada com sucesso',
       html: htmlContent,
@@ -50,7 +52,7 @@ export class SendGridEmailSender {
 
     emailSender
       .send(email)
-      .then(() => console.log('Email sent.'))
+      .then(() => console.log('Email sent to', emailReceiver))
       .catch((error) => {
         console.log('Error at sending email: ', error);
       });
