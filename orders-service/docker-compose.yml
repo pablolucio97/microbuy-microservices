@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres:
+  postgres-orders:
     container_name: graphql-orders-db
     image: postgres
     ports:
@@ -32,7 +32,7 @@ services:
     ports:
       - 3334:3334
     depends_on:
-      postgres:
+      postgres-orders:
         condition: service_healthy
     environment:
       DATABASE_URL: ${DATABASE_URL}

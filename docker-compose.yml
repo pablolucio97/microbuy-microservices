@@ -1,4 +1,10 @@
 version: '3.8'
+
+include:
+  - ./coupons-service/docker-compose.yml
+  - ./orders-service/docker-compose.yml
+  - ./emails-service/docker-compose.yml
+
 services:
   rabbitmq:
     image: 'rabbitmq:3-management'
