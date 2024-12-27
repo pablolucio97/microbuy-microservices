@@ -10,5 +10,9 @@ services:
     - .:/usr/src/app
     ports:
       - 3335:3335
+    networks:
+      - microbuy-network
 
-
+networks:
+  microbuy-network:
+    external: true

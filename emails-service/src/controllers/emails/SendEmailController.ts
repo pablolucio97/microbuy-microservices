@@ -7,20 +7,23 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { SendEmailUseCase } from '../../useCases/emails/SendEmailUseCase';
+import { RabbitMQService } from 'src/services/RabbitMQService';
+import { formatBRL } from 'src/utils/formats';
 import { z } from 'zod';
+import { SendEmailUseCase } from '../../useCases/emails/SendEmailUseCase';
 
 const emailDataSchema = z.object({
   to: z.string().email(),
-  order_id: z.string(),
-  order_total: z.number(),
 });
 
 type emailDataSchema = z.infer<typeof emailDataSchema>;
 
 @Controller('/emails/send')
 export class SendEmailController {
-  constructor(private readonly sendEmailUseCase: SendEmailUseCase) {}
+  constructor(
+    private readonly sendEmailUseCase: SendEmailUseCase,
+    private rabbitMQService: RabbitMQService,
+  ) {}
   @Post()
   @HttpCode(HttpStatus.OK)
   async handle(@Body() emailData: emailDataSchema) {
@@ -29,14 +32,24 @@ export class SendEmailController {
       throw new BadRequestException(validation.error.errors);
     }
     try {
-      await this.sendEmailUseCase.execute({
-        order: {
-          id: emailData.order_id,
-          total: emailData.order_total,
-        },
-        to: emailData.to,
-      });
-      return { message: 'Email sent successfully' };
+      const messages = await this.rabbitMQService.listenMessages();
+      if (messages && messages.length > 0) {
+        const parsedMessages = [];
+        for (const message of messages) {
+          parsedMessages.push(JSON.parse(message));
+        }
+        for (const parsedMessage of parsedMessages) {
+          await this.sendEmailUseCase.execute({
+            order: {
+              id: parsedMessage.id,
+              total: formatBRL(parsedMessage.total),
+            },
+            to: emailData.to,
+          });
+        }
+
+        return { message: 'Email sent successfully' };
+      }
     } catch (error) {
       console.log('Error at trying to send email: ', error);
       throw new ConflictException({

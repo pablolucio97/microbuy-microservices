@@ -9,7 +9,7 @@ export interface IEmailData {
   to: string;
   order: {
     id: string;
-    total: number;
+    total: string;
   };
 }
 
