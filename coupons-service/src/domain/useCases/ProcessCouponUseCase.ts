@@ -1,16 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  ICouponDTO,
-  IProcessCouponDTO,
-} from '../repositories/interfaces/dtos/CouponDTO';
+import { ICouponDTO } from '../repositories/interfaces/dtos/CouponDTO';
 import { CouponsService } from '../services/CouponsService';
 
 @Injectable()
 export class ProcessCouponUseCase {
   constructor(private couponsService: CouponsService) {}
 
-  async execute(data: IProcessCouponDTO): Promise<ICouponDTO> {
-    const coupon = await this.couponsService.processCoupon(data);
+  async execute(total: number): Promise<ICouponDTO> {
+    const coupon = await this.couponsService.processCoupon(total);
     if (!coupon) {
       throw new NotFoundException('Coupon not found.');
     }

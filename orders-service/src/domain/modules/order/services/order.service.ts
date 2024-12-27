@@ -12,6 +12,15 @@ export class OrderService {
 
     const total = products.reduce((acc, prod) => acc + prod.price, 0);
 
+    const notProcessedOderWithSameTotalAlreadyExists =
+      await this.prismaService.order.findFirst({
+        where: { total, was_processed: false },
+      });
+
+    if (notProcessedOderWithSameTotalAlreadyExists) {
+      return null;
+    }
+
     const newOrder = await this.prismaService.order.create({
       data: {
         total,

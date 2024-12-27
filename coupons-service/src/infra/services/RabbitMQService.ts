@@ -3,6 +3,20 @@ import { ConfigService } from '@nestjs/config';
 import { Channel, Connection, connect } from 'amqplib';
 import { TEnvSchema } from 'env';
 
+export interface IProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+}
+export interface IOrder {
+  id: string;
+  created_at: Date;
+  products?: IProduct[];
+  total: number;
+  was_processed: boolean;
+}
+
 @Injectable()
 export class RabbitMQService {
   private channel: Channel;
@@ -33,17 +47,34 @@ export class RabbitMQService {
     );
   }
 
-  async listenMessages() {
+  async listenMessages(timeout) {
     const messages = [];
-    await this.channel.consume(this.queue, (msg) => {
-      if (msg !== null) {
-        messages.push(msg.content.toString());
-      }
+    return new Promise((resolve, reject) => {
+      const onMessage = (msg) => {
+        if (msg) {
+          messages.push(msg.content.toString());
+          this.channel.ack(msg);
+        }
+      };
+
+      this.channel
+        .consume(this.queue, onMessage, { noAck: false })
+        .then((consumer) => {
+          setTimeout(async () => {
+            await this.channel.cancel(consumer.consumerTag);
+            resolve(messages);
+          }, timeout);
+        })
+        .catch(reject);
     });
+  }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    return messages;
+  async publishProcessedOrderMessage(order: IOrder) {
+    this.channel.publish(
+      this.exchange,
+      this.routeBindingKey,
+      Buffer.from(JSON.stringify(order)),
+    );
   }
 
   async close() {

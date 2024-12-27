@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infra/services/Prisma';
 import { ICouponsRepository } from './interfaces/CouponsRepository';
-import {
-  ICreateCouponDTO,
-  IProcessCouponDTO,
-} from './interfaces/dtos/CouponDTO';
+import { ICreateCouponDTO } from './interfaces/dtos/CouponDTO';
 
 @Injectable()
 export class CouponsRepository implements ICouponsRepository {
@@ -32,10 +29,10 @@ export class CouponsRepository implements ICouponsRepository {
     });
     return coupon;
   }
-  async processCoupon(data: IProcessCouponDTO) {
-    const coupon = await this.prismaService.coupon.findUnique({
+  async processCoupon(total: number) {
+    const coupon = await this.prismaService.coupon.findFirst({
       where: {
-        id: data.id,
+        total: total,
       },
     });
 
@@ -45,7 +42,7 @@ export class CouponsRepository implements ICouponsRepository {
 
     const processedCoupon = await this.prismaService.coupon.update({
       where: {
-        id: data.id,
+        id: coupon.id,
       },
       data: {
         processed: true,

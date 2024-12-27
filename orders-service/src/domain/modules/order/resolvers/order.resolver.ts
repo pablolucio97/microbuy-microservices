@@ -1,3 +1,4 @@
+import { ConflictException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RabbitMQService } from 'src/infra/services/RabbitMQService';
 import { Order } from '../model/order.model';
@@ -24,6 +25,10 @@ export class OrdersResolver {
       await this.rabbitMQService.publishOrderCreatedMessage(order).then(() => {
         console.log('Message published');
       });
+    } else {
+      throw new ConflictException(
+        'A not processed order with same value already exists.',
+      );
     }
     return order;
   }
