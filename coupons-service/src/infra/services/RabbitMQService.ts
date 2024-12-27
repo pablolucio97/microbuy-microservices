@@ -53,7 +53,6 @@ export class RabbitMQService {
       const onMessage = (msg) => {
         if (msg) {
           messages.push(msg.content.toString());
-          this.channel.ack(msg);
         }
       };
 
