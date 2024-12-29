@@ -1,32 +1,33 @@
 "use client";
+import { IProduct } from "@/interfaces/products";
 import { formatBRL } from "@/utils/format";
 
 interface ProductCardProps {
   id: string;
-  title: string;
+  name: string;
   description: string;
   price: number;
-  onRemoveItem: () => void;
+  onAddToCart: (prod: IProduct) => void;
 }
 
 export default function ProductCard({
   id,
-  title,
+  name,
   description,
   price,
-  onRemoveItem,
+  onAddToCart,
 }: ProductCardProps) {
   return (
     <div
       className="w-full flex flex-col p-4 rounded-md mb-3 mr-3 bg-textWhite"
       key={id}
     >
-      <strong>{title}</strong>
+      <strong>{name}</strong>
       <div className="w-full flex justify-between items-center">
         <span>{description}</span>
         <button
           className="h-8 flex flex-col justify-center items-center p-4 py-6 font-bold text-lg rounded-md bg-primaryLight text-textWhite"
-          onClick={onRemoveItem}
+          onClick={() => onAddToCart({ id, name, description, price })}
         >
           Add to cart
         </button>

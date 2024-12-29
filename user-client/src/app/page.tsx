@@ -2,8 +2,30 @@
 import Cart from "@/components/Cart";
 import ProductCard from "@/components/ProductCard";
 import { products } from "@/data/mock";
+import { IProduct } from "@/interfaces/products";
+import { useState } from "react";
 
 export default function Home() {
+  const [cartProducts, setCartProducts] = useState<IProduct[]>([]);
+
+  const handleRemoveProduct = (productId: string) => {
+    setCartProducts((prevProducts) =>
+      prevProducts.filter((prod) => prod.id !== productId)
+    );
+  };
+
+  const handleAddProduct = (product: IProduct) => {
+    setCartProducts((prevProducts) => {
+      const isProductInCartAlready = prevProducts.some(
+        (prod) => prod.id === product.id
+      );
+      if (!isProductInCartAlready) {
+        return [...prevProducts, product];
+      }
+      return prevProducts;
+    });
+  };
+
   return (
     <div className="w-screen min-h-screen flex flex-col overflow-x-hidden">
       <main className="w-full flex pl-[4rem]">
@@ -19,15 +41,19 @@ export default function Home() {
               <ProductCard
                 key={prod.id}
                 id={prod.id}
-                title={prod.name}
+                name={prod.name}
                 description={prod.description}
                 price={prod.price}
-                onRemoveItem={() => console.log("Item removed")}
+                onAddToCart={() => handleAddProduct(prod)}
               />
             ))}
           </div>
         </div>
-        <Cart />
+        <Cart
+          products={cartProducts}
+          onFinishOrder={() => console.log("Order finished")}
+          onRemoveProduct={handleRemoveProduct as never}
+        />
       </main>
     </div>
   );

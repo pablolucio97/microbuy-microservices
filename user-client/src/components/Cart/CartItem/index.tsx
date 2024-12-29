@@ -6,7 +6,7 @@ interface CartItemProps {
   title: string;
   description: string;
   price: number;
-  onRemoveItem: () => void;
+  onRemoveProduct: (productId: string) => void;
 }
 
 export default function CartItem({
@@ -14,7 +14,7 @@ export default function CartItem({
   title,
   description,
   price,
-  onRemoveItem,
+  onRemoveProduct,
 }: CartItemProps) {
   return (
     <div
@@ -26,7 +26,7 @@ export default function CartItem({
         <span>{description}</span>
         <button
           className="h-8 flex flex-col justify-center items-center p-2 font-bold rounded-md bg-red-400 text-textWhite"
-          onClick={onRemoveItem}
+          onClick={() => onRemoveProduct(id)}
         >
           Remove
         </button>
