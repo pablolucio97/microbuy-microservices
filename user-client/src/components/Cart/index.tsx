@@ -6,16 +6,34 @@ interface CartProps {
   products: IProduct[];
   onRemoveProduct: () => void;
   onFinishOrder: () => void;
+  onCloseCart: () => void;
+  showCart: boolean;
 }
 
 export default function Cart({
   onFinishOrder,
   products,
   onRemoveProduct,
+  onCloseCart,
+  showCart,
 }: CartProps) {
   return (
-    <aside className="w-full md:min-w-[24rem] md:w-2/3 lg:w-1/3 h-screen bg-white p-4 relative overflow-hidden">
-      <h2 className="font-bold text-xl mb-4">Your cart</h2>
+    <aside
+      className={
+        showCart
+          ? "w-full h-screen bg-white p-4 relative overflow-hidden"
+          : "hidden"
+      }
+    >
+      <div className="w-full flex justify-between items-center mb-4">
+        <h2 className="font-bold text-xl ">Your cart</h2>
+        <button
+          className="p-1 rounded-md flex items-center justify-center bg-red-400 ml-4 md:hidden"
+          onClick={onCloseCart}
+        >
+          Close
+        </button>
+      </div>
       <div className="w-full max-h-[85%] p-3 overflow-y-auto overflow-x-hidden">
         {products.map((prod) => (
           <CartItem

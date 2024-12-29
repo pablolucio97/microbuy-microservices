@@ -25,7 +25,7 @@ export default function CartItem({
       <div className="w-full flex justify-between items-center">
         <span>{description}</span>
         <button
-          className="h-8 flex flex-col justify-center items-center p-2 font-bold rounded-md bg-red-400 text-textWhite"
+          className="h-8 flex flex-col justify-center items-center p-2 font-bold rounded-md bg-red-400 text-textWhite ml-3"
           onClick={() => onRemoveProduct(id)}
         >
           Remove
