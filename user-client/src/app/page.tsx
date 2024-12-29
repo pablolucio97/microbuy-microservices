@@ -50,16 +50,16 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-screen min-h-screen flex flex-col overflow-x-hidden">
+    <div className="w-screen min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-r from-gray-800 to-gray-900">
       <main className="w-full flex md:pl-[4rem]">
         <div className={showMobileCart ? "hidden" : "w-full md:px-8"}>
-          <h1 className="text-textHeading text-2xl ml-3 font-bold mt-4">
+          <h1 className="text-textHeading text-xl md:text-2xl ml-3 font-bold mt-2 text-white">
             MicroBuy
           </h1>
-          <span className="text-textHeading text-md ml-3 ">
+          <span className="text-textHeading  text-sm md:text-xl ml-3 text-white">
             Select the products to emit your order
           </span>
-          <div className="w-full max-h-[90vh] p-3 overflow-y-auto overflow-x-hidden">
+          <div className="w-full max-h-[90vh] p-3 overflow-y-auto overflow-x-hidden scrollable-div mt-4">
             {products.map((prod) => (
               <ProductCard
                 key={prod.id}
@@ -83,7 +83,7 @@ export default function Home() {
           />
         ) : (
           <button
-            className="h-8 flex flex-col justify-center items-center p-4 py-6 font-bold text-lg rounded-md bg-primaryLight text-textWhite md:hidden absolute top-4 right-8"
+            className="h-8 flex flex-col justify-center items-center p-4 py-6 font-bold rounded-md bg-primaryLight text-textWhite md:hidden absolute top-4 right-4 text-sm lg:text-[14px]"
             onClick={handleShowCart}
           >
             Show cart
