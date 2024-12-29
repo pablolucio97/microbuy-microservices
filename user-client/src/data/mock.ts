@@ -60,3 +60,26 @@ export const products = [
     price: 45,
   },
 ];
+
+export const orders = [
+  {
+    "id": "bbc28807-54e3-4b39-8030-a458bc7d2d39",
+    "total": 35,
+    "was_processed": true,
+  },
+  {
+    "id": "aabb38807-54e3-4b39-8030-a458bc7d2d39",
+    "total": 135,
+    "was_processed": false,
+  },
+  {
+    "id": "dd3328807-54e3-4b39-8030-a458bc7d2d39",
+    "total": 49,
+    "was_processed": true,
+  },
+  {
+    "id": "23b28807-54e3-4b39-8030-a458bc7d2d39",
+    "total": 210,
+    "was_processed": false,
+  },
+]
