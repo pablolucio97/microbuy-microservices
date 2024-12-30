@@ -8,6 +8,7 @@ interface CartProps {
   onFinishOrder: () => void;
   onCloseCart: () => void;
   showCart: boolean;
+  finishOrderButtonDisabled: boolean;
 }
 
 export default function Cart({
@@ -16,6 +17,7 @@ export default function Cart({
   onRemoveProduct,
   onCloseCart,
   showCart,
+  finishOrderButtonDisabled,
 }: CartProps) {
   return (
     <aside
@@ -48,10 +50,11 @@ export default function Cart({
       </div>
       <div className="w-full flex items-center justify-center absolute bottom-0 right-0 p-8">
         <button
-          className="w-full h-12 flex flex-col justify-center items-center p-4 font-bold rounded-md bg-primaryLight text-textWhite text-sm lg:text-[14px]"
+          className="w-full h-12 flex flex-col justify-center items-center p-4 font-bold rounded-md bg-primaryLight text-textWhite text-sm lg:text-[14px] disabled:opacity-50"
           onClick={onFinishOrder}
+          disabled={finishOrderButtonDisabled}
         >
-          Finish order
+           Finish order
         </button>
       </div>
     </aside>
