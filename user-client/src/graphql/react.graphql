@@ -1,0 +1,30 @@
+query ListOrders{
+	listOrders{
+		id
+		total
+		was_processed
+		products{
+			id
+			name
+			price
+		}
+
+	}
+}
+
+mutation CreateOrder($productIds: [String!]!) {
+  createOrder(productIds: $productIds) {
+    id
+    total
+		was_processed
+  }
+}
+
+query ListProducts{
+	listProducts{
+		id,
+		name,
+		description,
+		price
+	}
+}

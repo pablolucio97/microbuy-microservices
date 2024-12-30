@@ -2,7 +2,7 @@
 import Cart from "@/components/Cart";
 import EmailModal from "@/components/EmailModal";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/mock";
+import { useListProductsQuery } from "@/graphql/graphql";
 import { IProduct } from "@/interfaces/products";
 import { CouponsRepository } from "@/repositories/couponsRepostory/CouponsRepository";
 import { EmailsRepository } from "@/repositories/emailsRepository/EmailsRepository";
@@ -26,6 +26,12 @@ export default function Home() {
   const couponsRepository = useMemo(() => {
     return new CouponsRepository();
   }, []);
+
+  const {
+    data: productsListData,
+    loading: productsListLoading,
+    error: productsListError,
+  } = useListProductsQuery();
 
   const totalCartProducts = useMemo(() => {
     const total = cartProducts.reduce((acc, val) => acc + val.price, 0);
@@ -128,17 +134,29 @@ export default function Home() {
           <span className="text-textHeading  text-sm md:text-xl ml-3 text-white">
             Select the products to emit your order
           </span>
-          <div className="w-full max-h-[90vh] p-3 overflow-y-auto overflow-x-hidden scrollable-div mt-4">
-            {products.map((prod) => (
-              <ProductCard
-                key={prod.id}
-                id={prod.id}
-                name={prod.name}
-                description={prod.description}
-                price={prod.price}
-                onAddToCart={() => handleAddProduct(prod)}
-              />
-            ))}
+          <div className="w-full max-h-[90vh] overflow-y-auto overflow-x-hidden scrollable-div mt-4">
+            {loading || productsListLoading ? (
+              <span className="text-textHeading  text-sm md:text-xl ml-3 text-white mt-2 mb-3">
+                Loading...
+              </span>
+            ) : productsListError ? (
+              <span className="text-textHeading  text-sm md:text-xl ml-3 text-white mt-2 mb-3">
+                Something went wrong. Please, try again later.
+              </span>
+            ) : (
+              productsListData &&
+              productsListData.listProducts &&
+              productsListData.listProducts.map((prod) => (
+                <ProductCard
+                  key={prod.id}
+                  id={prod.id}
+                  name={prod.name}
+                  description={prod.description}
+                  price={prod.price}
+                  onAddToCart={() => handleAddProduct(prod)}
+                />
+              ))
+            )}
           </div>
         </div>
 
