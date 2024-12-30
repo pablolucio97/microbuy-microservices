@@ -1,4 +1,4 @@
-import { emailsApi } from "./../../services/emalService";
+import { emailsApi } from "../../services/emailsService";
 import { IEmailData, IEmailsRepository } from "./interface";
 
 export class EmailsRepository implements IEmailsRepository {

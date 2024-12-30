@@ -4,6 +4,7 @@ import EmailModal from "@/components/EmailModal";
 import ProductCard from "@/components/ProductCard";
 import { products } from "@/data/mock";
 import { IProduct } from "@/interfaces/products";
+import { CouponsRepository } from "@/repositories/couponsRepostory/CouponsRepository";
 import { EmailsRepository } from "@/repositories/emailsRepository/EmailsRepository";
 import { validateEmail } from "@/utils/validators";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -17,6 +18,19 @@ export default function Home() {
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   const MEDIUM_DEVICE_BREAKPOINT = 768;
+
+  const emailsRepository = useMemo(() => {
+    return new EmailsRepository();
+  }, []);
+
+  const couponsRepository = useMemo(() => {
+    return new CouponsRepository();
+  }, []);
+
+  const totalCartProducts = useMemo(() => {
+    const total = cartProducts.reduce((acc, val) => acc + val.price, 0);
+    return total;
+  }, [cartProducts]);
 
   const handleRemoveProduct = (productId: string) => {
     setCartProducts((prevProducts) =>
@@ -56,10 +70,6 @@ export default function Home() {
     };
   }, []);
 
-  const emailsRepository = useMemo(() => {
-    return new EmailsRepository();
-  }, []);
-
   const handleToggleEmailModal = useCallback(() => {
     setShowEmailModal(!showEmailModal);
   }, [showEmailModal]);
@@ -67,10 +77,9 @@ export default function Home() {
   const sendEmail = async () => {
     try {
       setLoading(true);
-      const res = await emailsRepository.sendEmail({
+      await emailsRepository.sendEmail({
         to: email,
       });
-      console.log(res);
     } catch (error) {
       console.log(error);
     } finally {
@@ -79,12 +88,35 @@ export default function Home() {
     }
   };
 
+  const createCoupon = useCallback(async () => {
+    try {
+      setLoading(true);
+      const coupon = await couponsRepository.createCoupon({
+        total: totalCartProducts,
+      });
+      console.log(coupon);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+      handleToggleEmailModal();
+    }
+  }, [couponsRepository, handleToggleEmailModal, totalCartProducts]);
+
   useEffect(() => {
     const MIN_EMAIL_LENGTH = 5;
     if (email.length > MIN_EMAIL_LENGTH) {
       setIsEmailValid(validateEmail(email));
     }
   }, [email]);
+
+  const handleFinishOrder = useCallback(async () => {
+    try {
+      await createCoupon();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [createCoupon]);
 
   return (
     <div className="w-screen min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-r from-gray-800 to-gray-900">
@@ -144,7 +176,7 @@ export default function Home() {
           email={email}
           setEmail={setEmail}
           finishOrderButtonDisabled={loading || !isEmailValid}
-          onFinishOrder={sendEmail}
+          onFinishOrder={handleFinishOrder}
         />
       </main>
     </div>
