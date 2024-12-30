@@ -2,11 +2,15 @@
 import Cart from "@/components/Cart";
 import EmailModal from "@/components/EmailModal";
 import ProductCard from "@/components/ProductCard";
-import { useListProductsQuery } from "@/graphql/graphql";
+import { useEmail } from "@/contexts/EmailContext";
+import {
+  useCreateOrderMutation,
+  useListProductsQuery,
+} from "@/graphql/graphql";
 import { IProduct } from "@/interfaces/products";
 import { CouponsRepository } from "@/repositories/couponsRepostory/CouponsRepository";
-import { EmailsRepository } from "@/repositories/emailsRepository/EmailsRepository";
 import { validateEmail } from "@/utils/validators";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function Home() {
@@ -14,14 +18,12 @@ export default function Home() {
   const [showMobileCart, setShowMobileCart] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
-  const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   const MEDIUM_DEVICE_BREAKPOINT = 768;
 
-  const emailsRepository = useMemo(() => {
-    return new EmailsRepository();
-  }, []);
+  const router = useRouter();
+  const {email, setEmail} = useEmail()
 
   const couponsRepository = useMemo(() => {
     return new CouponsRepository();
@@ -80,19 +82,9 @@ export default function Home() {
     setShowEmailModal(!showEmailModal);
   }, [showEmailModal]);
 
-  const sendEmail = async () => {
-    try {
-      setLoading(true);
-      await emailsRepository.sendEmail({
-        to: email,
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-      handleToggleEmailModal();
-    }
-  };
+  const navigateToOrders = useCallback(() => {
+    router.push("/orders");
+  }, [router]);
 
   const createCoupon = useCallback(async () => {
     try {
@@ -109,6 +101,24 @@ export default function Home() {
     }
   }, [couponsRepository, handleToggleEmailModal, totalCartProducts]);
 
+  const [
+    createOrder,
+    { loading: createOrderLoading, error: createOrderError },
+  ] = useCreateOrderMutation();
+
+  const handleCreateOrder = useCallback(async () => {
+    try {
+      const productsIds = cartProducts.map((prod) => prod.id);
+      createOrder({
+        variables: {
+          productIds: productsIds,
+        },
+      });
+    } catch {
+      console.log(createOrderError);
+    }
+  }, [cartProducts, createOrder, createOrderError]);
+
   useEffect(() => {
     const MIN_EMAIL_LENGTH = 5;
     if (email.length > MIN_EMAIL_LENGTH) {
@@ -119,10 +129,12 @@ export default function Home() {
   const handleFinishOrder = useCallback(async () => {
     try {
       await createCoupon();
+      await handleCreateOrder();
+      navigateToOrders();
     } catch (error) {
       console.log(error);
     }
-  }, [createCoupon]);
+  }, [createCoupon, handleCreateOrder, navigateToOrders]);
 
   return (
     <div className="w-screen min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-r from-gray-800 to-gray-900">
@@ -195,7 +207,9 @@ export default function Home() {
           onRequestClose={handleToggleEmailModal}
           email={email}
           setEmail={setEmail}
-          finishOrderButtonDisabled={loading || !isEmailValid}
+          finishOrderButtonDisabled={
+            loading || createOrderLoading || !isEmailValid
+          }
           onFinishOrder={handleFinishOrder}
         />
       </main>

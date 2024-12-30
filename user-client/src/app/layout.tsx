@@ -1,3 +1,4 @@
+import { EmailContextProvider } from "@/contexts/EmailContext";
 import ApolloClientProvider from "@/providers/ApolloProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -30,7 +31,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ApolloClientProvider>
-          <ClientQueryProvider>{children}</ClientQueryProvider>
+          <ClientQueryProvider>
+            <EmailContextProvider>{children}</EmailContextProvider>
+          </ClientQueryProvider>
         </ApolloClientProvider>
       </body>
     </html>
