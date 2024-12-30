@@ -150,6 +150,7 @@ export default function Home() {
             onCloseCart={handleShowCart}
             showCart={showMobileCart}
             finishOrderButtonDisabled={cartProducts.length < 1}
+            totalProducts={totalCartProducts}
           />
         ) : (
           <button
@@ -168,6 +169,7 @@ export default function Home() {
             onCloseCart={handleShowCart}
             showCart={!showMobileCart}
             finishOrderButtonDisabled={cartProducts.length < 1}
+            totalProducts={totalCartProducts}
           />
         </div>
         <EmailModal

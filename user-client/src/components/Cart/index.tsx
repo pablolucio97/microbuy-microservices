@@ -1,5 +1,6 @@
 "use client";
 import { IProduct } from "@/interfaces/products";
+import { formatBRL } from "@/utils/format";
 import CartItem from "./CartItem";
 
 interface CartProps {
@@ -9,6 +10,7 @@ interface CartProps {
   onCloseCart: () => void;
   showCart: boolean;
   finishOrderButtonDisabled: boolean;
+  totalProducts: number;
 }
 
 export default function Cart({
@@ -18,6 +20,7 @@ export default function Cart({
   onCloseCart,
   showCart,
   finishOrderButtonDisabled,
+  totalProducts,
 }: CartProps) {
   return (
     <aside
@@ -48,13 +51,16 @@ export default function Cart({
           />
         ))}
       </div>
-      <div className="w-full flex items-center justify-center absolute bottom-0 right-0 p-8">
+      <div className="w-full flex flex-col items-end justify-center absolute bottom-0 right-0 p-8">
+        <span className="font-bold text-lg md:text-xl text-white mb-3">
+          Total: {formatBRL(totalProducts)}{" "}
+        </span>
         <button
           className="w-full h-12 flex flex-col justify-center items-center p-4 font-bold rounded-md bg-primaryLight text-textWhite text-sm lg:text-[14px] disabled:opacity-50"
           onClick={onFinishOrder}
           disabled={finishOrderButtonDisabled}
         >
-           Finish order
+          Finish order
         </button>
       </div>
     </aside>
