@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Channel, Connection, connect } from 'amqplib';
 import { TEnvSchema } from 'env';
@@ -18,7 +18,7 @@ export interface IOrder {
 }
 
 @Injectable()
-export class RabbitMQService {
+export class RabbitMQService implements OnModuleDestroy {
   private channel: Channel;
   private connection: Connection;
   private exchange = 'orders';
@@ -27,6 +27,9 @@ export class RabbitMQService {
 
   constructor(private configService: ConfigService<TEnvSchema, true>) {
     this.initRabbitMQ();
+  }
+  onModuleDestroy() {
+    this.close();
   }
 
   private async initRabbitMQ() {

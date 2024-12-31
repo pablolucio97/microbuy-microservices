@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Channel, connect, Connection } from 'amqplib';
 import { TEnvSchema } from 'env';
 
 @Injectable()
-export class RabbitMQService {
+export class RabbitMQService implements OnModuleDestroy {
   private connection: Connection;
   private channel: Channel;
   private exchange = 'orders';
@@ -13,6 +13,9 @@ export class RabbitMQService {
 
   constructor(private configService: ConfigService<TEnvSchema, true>) {
     this.initRabbitMQ();
+  }
+  onModuleDestroy() {
+    this.close();
   }
 
   private async initRabbitMQ() {
@@ -53,5 +56,9 @@ export class RabbitMQService {
         })
         .catch(reject);
     });
+  }
+  async close() {
+    await this.channel.close();
+    await this.connection.close();
   }
 }
