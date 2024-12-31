@@ -32,9 +32,11 @@ export class SendEmailController {
       throw new BadRequestException(validation.error.errors);
     }
     try {
-      const messages = await this.rabbitMQService.listenMessages();
-      if (messages && messages.length > 0) {
+      const TIMER = 2000
+      const messages = await this.rabbitMQService.listenMessages(TIMER);
+      if (messages) {
         const parsedMessages = [];
+         //@ts-expect-error messages type is array
         for (const message of messages) {
           parsedMessages.push(JSON.parse(message));
         }

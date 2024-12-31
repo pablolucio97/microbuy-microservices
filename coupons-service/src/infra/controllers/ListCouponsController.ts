@@ -13,7 +13,7 @@ export class ListCouponsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async handle() {
-    const LISTEN_TIMER = 3000;
+    const LISTEN_TIMER = 2000;
     try {
       const coupons = await this.listCouponsUseCase.execute();
       const messages = await this.rabbitMQService.listenMessages(LISTEN_TIMER);

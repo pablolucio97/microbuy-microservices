@@ -34,18 +34,24 @@ export class RabbitMQService {
     );
   }
 
-  async listenMessages() {
+  async listenMessages(timeout) {
     const messages = [];
-    await this.channel.consume(
-      this.queue,
-      (msg) => {
-        messages.push(msg.content.toString());
-        this.channel.ack(msg);
-      },
-      {
-        noAck: false,
-      },
-    );
-    return messages;
+    return new Promise((resolve, reject) => {
+      const onMessage = (msg) => {
+        if (msg) {
+          messages.push(msg.content.toString());
+        }
+      };
+
+      this.channel
+        .consume(this.queue, onMessage, { noAck: false })
+        .then((consumer) => {
+          setTimeout(async () => {
+            await this.channel.cancel(consumer.consumerTag);
+            resolve(messages);
+          }, timeout);
+        })
+        .catch(reject);
+    });
   }
 }
