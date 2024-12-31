@@ -27,12 +27,12 @@ export default function Cart({
     <aside
       className={
         showCart
-          ? "w-full md:min-w-[24rem] h-screen bg-gradient-to-b from-gray-700 to-gray-900 p-4 relative overflow-hidden"
+          ? "w-full md:min-w-[24rem] h-[90vh] bg-gradient-to-b from-gray-700 to-gray-900 p-4 relative overflow-hidden"
           : "hidden"
       }
     >
       <div className="w-full flex justify-between items-center mb-4">
-        <h2 className="font-bold text-xl text-white">Your cart</h2>
+        <h2 className="font-bold text-xl text-white mt-2">Your cart</h2>
         <button
           className="p-1 rounded-md flex items-center justify-center bg-red-400 ml-4 md:hidden text-white text-sm lg:text-[14px]"
           onClick={onCloseCart}

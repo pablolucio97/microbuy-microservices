@@ -1,4 +1,5 @@
 "use client";
+import Header from "@/components/Header";
 import { useEmail } from "@/contexts/EmailContext";
 import { CouponsRepository } from "@/repositories/couponsRepostory/CouponsRepository";
 import { ICouponDTO } from "@/repositories/dtos/CouponDTO";
@@ -74,11 +75,9 @@ export default function Orders() {
 
   return (
     <div className="w-screen min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-r from-gray-800 to-gray-900">
-      <main className="w-full flex md:pl-[4rem]">
+          <Header />
+      <main className="w-full flex md:pl-[4rem] mt-[6rem]">
         <div className="w-full px-8">
-          <h1 className="text-textHeading text-xl md:text-2xl ml-3 font-bold my-2 text-white">
-            MicroBuy
-          </h1>
           <span className="text-textHeading  text-sm md:text-xl ml-3 text-white mt-2 mb-3">
             Your orders
           </span>
