@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  user-client:
+   container_name: user-client
+   build:
+      context: .
+      dockerfile: Dockerfile
+   ports: 
+    - 3000:3000
+   networks:
+    - microbuy-network
+
+networks:
+  microbuy-network:
+    external: true
+
+

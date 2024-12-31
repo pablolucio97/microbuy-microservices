@@ -4,6 +4,7 @@ include:
   - ./coupons-service/docker-compose.yml
   - ./orders-service/docker-compose.yml
   - ./emails-service/docker-compose.yml
+  - ./user-client/docker-compose.yml
 
 services:
   rabbitmq:
