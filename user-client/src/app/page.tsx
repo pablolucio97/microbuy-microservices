@@ -12,6 +12,8 @@ import { CouponsRepository } from "@/repositories/couponsRepostory/CouponsReposi
 import { validateEmail } from "@/utils/validators";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
+import { IoMdMenu } from "react-icons/io";
 
 export default function Home() {
   const [cartProducts, setCartProducts] = useState<IProduct[]>([]);
@@ -23,7 +25,7 @@ export default function Home() {
   const MEDIUM_DEVICE_BREAKPOINT = 768;
 
   const router = useRouter();
-  const {email, setEmail} = useEmail()
+  const { email, setEmail } = useEmail();
 
   const couponsRepository = useMemo(() => {
     return new CouponsRepository();
@@ -138,15 +140,18 @@ export default function Home() {
 
   return (
     <div className="w-screen min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-r from-gray-800 to-gray-900">
-      <main className="w-full flex md:pl-[4rem]">
+      <main className="w-full flex md:pl-[4rem] px-4">
         <div className={showMobileCart ? "hidden" : "w-full md:px-8"}>
-          <h1 className="text-textHeading text-xl md:text-2xl ml-3 font-bold mt-2 text-white">
-            MicroBuy
-          </h1>
-          <span className="text-textHeading  text-sm md:text-xl ml-3 text-white">
+          <div className="flex items-center mt-2">
+            <FaShoppingCart className="w-8 h-8 text-primaryLight" />
+            <h1 className="text-textHeading text-xl md:text-2xl ml-3 font-bold mt-2 text-white">
+              MicroBuy
+            </h1>
+          </div>
+          <span className="text-textHeading  text-sm md:text-lg ml-3 text-white">
             Select the products to emit your order
           </span>
-          <div className="w-full max-h-[90vh] overflow-y-auto overflow-x-hidden scrollable-div mt-4">
+          <div className="w-full max-h-[85vh] overflow-y-auto overflow-x-hidden scrollable-div mt-4">
             {loading || productsListLoading ? (
               <span className="text-textHeading  text-sm md:text-xl ml-3 text-white mt-2 mb-3">
                 Loading...
@@ -184,9 +189,10 @@ export default function Home() {
           />
         ) : (
           <button
-            className="h-8 flex flex-col justify-center items-center p-4 py-6 font-bold rounded-md bg-primaryLight text-textWhite md:hidden absolute top-4 right-4 text-sm lg:text-[14px]"
+            className="h-8 flex justify-center items-center p-4 py-6 font-bold rounded-md bg-primaryLight text-textWhite md:hidden absolute top-4 right-4 text-sm lg:text-[14px]"
             onClick={handleShowCart}
           >
+            <IoMdMenu className="w-5 h-5 text-white mr-3" />
             Show cart
           </button>
         )}

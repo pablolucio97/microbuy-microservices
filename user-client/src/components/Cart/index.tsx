@@ -2,6 +2,7 @@
 import { IProduct } from "@/interfaces/products";
 import { formatBRL } from "@/utils/format";
 import CartItem from "./CartItem";
+import { MdClose } from "react-icons/md";
 
 interface CartProps {
   products: IProduct[];
@@ -36,7 +37,7 @@ export default function Cart({
           className="p-1 rounded-md flex items-center justify-center bg-red-400 ml-4 md:hidden text-white text-sm lg:text-[14px]"
           onClick={onCloseCart}
         >
-          Close
+       <MdClose className="w-8 h-8 text-white" />
         </button>
       </div>
       <div className="w-full max-h-[85%] p-3 overflow-y-auto overflow-x-hidden">

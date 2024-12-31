@@ -1,6 +1,7 @@
 "use client";
 import { IProduct } from "@/interfaces/products";
 import { formatBRL } from "@/utils/format";
+import { FaShoppingCart } from "react-icons/fa";
 
 interface ProductCardProps {
   id: string;
@@ -28,9 +29,10 @@ export default function ProductCard({
       <div className="w-full flex justify-between items-center">
         <span className="text-white text-xs lg:text-[14px]">{description}</span>
         <button
-          className="h-8 flex flex-col justify-center items-center p-4 py-6 font-bold rounded-md bg-gradient-to-r from-primary to-primaryLight text-textWhite text-sm lg:text-[14px]"
+          className="h-8 flex justify-center items-center p-4 py-6 font-bold rounded-md bg-gradient-to-r from-primary to-primaryLight text-textWhite text-sm lg:text-[14px]"
           onClick={() => onAddToCart({ id, name, description, price })}
         >
+          <FaShoppingCart className="w-4 h-4 md:w-6 md:h-6 text-white mr-4" />
           Add to cart
         </button>
       </div>
